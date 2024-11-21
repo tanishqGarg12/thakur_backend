@@ -5,7 +5,7 @@ const User = require('../models/user');
 exports.authenticate = async (req, res, next) => {
     try {
         const token = req.cookies.token || req.header('Authorization')?.replace('Bearer ', '');
-        console.log(token)
+        console.log("dsD"+token)
         if (!token) {
             return res.status(401).json({ message: 'Access denied. No token provided.' });
         }
@@ -16,9 +16,10 @@ exports.authenticate = async (req, res, next) => {
         if (!req.user) {
             return res.status(401).json({ message: 'User not found. Invalid token.' });
         }
-
+        console.log("doneeeeeeee")
         next();
     } catch (error) {
+      console.log(error)
         res.status(401).json({ message: 'Invalid or expired token.' });
     }
 };

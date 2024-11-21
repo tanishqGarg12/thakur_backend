@@ -5,12 +5,12 @@ const reviewSchema = new mongoose.Schema(
         product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product', // Reference to the Product being reviewed
-            required: true,
+            // required: true,
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // Reference to the User writing the review
-            required: true,
+            // required: true,
         },
         rating: {
             type: Number,

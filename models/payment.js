@@ -5,16 +5,16 @@ const paymentSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      // required: true,
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
-      required: true,
+      // required: true,
     },
     amount: {
       type: Number,
-      required: true,
+      // required: true,
     },
     paymentStatus: {
       type: String,

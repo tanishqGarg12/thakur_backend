@@ -5,38 +5,39 @@ const User = require('../models/user');
 // Create a payment transaction
 exports.createPayment = async (req, res) => {
     try {
-        const { amount, productId} = req.body;
-
+        const { amount} = req.body;
+        console.log("sdcdsxc")
         // Ensure user is authenticated
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
+        console.log("sdcdsxc")
         // Ensure the product exists
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
+        // const product = await Product.findById(productId);
+        // if (!product) {
+        //     return res.status(404).json({ message: 'Product not found' });
+        // }
 
         // Create the payment
         const payment = new Payment({
             userId: req.user.id,
-            productId: productId,
+            // productId: productId,
             amount,
             paymentStatus: "Completed", // Default to 'Pending' if no status is provided
         });
-
+        console.log("sdcdsxc")
         await payment.save();
 
         // Push the payment into the product's payments array
-        product.payments.push(payment._id);
-        await product.save();
-
+        // product.payments.push(payment._id);
+        // await product.save();
+        console.log("sdcdsxc")
         res.status(201).json({
             message: 'Payment created successfully',
             payment,
         });
+        console.log("sdcdsxc")
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

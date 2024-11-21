@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true },
-        category: { type: String, required: true },
+        name: { type: String },
+        category: { type: String },
         description: { type: String },
-        price: { type: Number, required: true },
+        price: { type: Number },
         stock: { type: Number, default: 0 }, // Quantity available
         image: { type: String }, // URL of the product image
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User', // Reference to the user who added the product
-            required: true,
+            // required: true,
         },
         reviews: [{ 
             type: mongoose.Schema.Types.ObjectId, 

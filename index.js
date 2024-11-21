@@ -8,6 +8,8 @@ const payment =require("./routes/payment")
 const wishlist=require("./routes/wishlist")
 const cart =require("./routes/cart")
 const database = require("./config/database");
+const cors=require('cors')
+
 // Initialize dotenv
 dotenv.config();
 
@@ -16,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json()); // Parse JSON requests
 app.use(cookieParser()); // Parse cookies
-
+app.use(cors());
 // Basic route
 app.get('/', (req, res) => {
     res.send('Boat Website Backend Running!');
