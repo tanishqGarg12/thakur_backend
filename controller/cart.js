@@ -4,24 +4,30 @@ const User = require('../models/user');
 
 // Add a product to the cart
 exports.addToCart = async (req, res) => {
-    const { productId,quantity,id} = req.body;
-//   console.log(productId)
+  const { productId, quantity } = req.body;
 
   try {
-    // console.log("user isssss "+user.user)
+    // Fetch the product
     const product = await Product.findById(productId);
-    // console.log(product)
+
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: "Product not found" });
     }
-    const id=req.user.id
-    console.log("user id is "+ id)
-    // cosnole.log("heloo")
-    let cart = await Cart.findOne({ userId: id});
-    // console.log(cart)
+
+    console.log("Fetched Product:", product); // Debugging log
+
+    const name = product?.name || "Unknown Product"; // Handle missing name
+
+    // Get the user ID from req.user
+    const userId = req.user.id;
+
+    let cart = await Cart.findOne({ userId });
 
     if (cart) {
-      const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+      const itemIndex = cart.items.findIndex(
+        (item) => item.productId.toString() === productId
+      );
+
       if (itemIndex > -1) {
         let item = cart.items[itemIndex];
         item.quantity += quantity;
@@ -29,33 +35,43 @@ exports.addToCart = async (req, res) => {
         cart.items[itemIndex] = item;
       } else {
         cart.items.push({
-          productId,
-          name: product.name,
-          quantity:quantity,
+          productId: product._id,
+          name, // Use the name retrieved from the product
+          image:product.image,
+          quantity,
           price: product.price,
           total: product.price * quantity,
         });
       }
     } else {
       cart = new Cart({
-        userId: id,
-        items: [{
-          productId,
-          name: product.name,
-          quantity,
-          price: product.price,
-          total: product.price * quantity,
-        }],
+        userId,
+        items: [
+          {
+            productId: product._id,
+            name, // Use the name retrieved from the product
+            image:product.image,
+            quantity,
+            price: product.price,
+            total: product.price * quantity,
+          },
+        ],
       });
     }
 
+    console.log("Cart Before Save:", cart); // Debugging log
     await cart.save();
+    console.log("Added to Cart Successfully");
+
+
     res.status(201).json(cart);
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Server Error', error });
+    console.error("Error in addToCart:", error);
+    res.status(500).json({ message: "Server Error", error });
   }
 };
+
+
 
 // Get the user's cart
 // Get the user's cart
@@ -68,6 +84,7 @@ exports.getCart = async (req, res) => {
         if (!cart || cart.items.length === 0) {
             return res.status(404).json({ message: 'Cart is empty' });
         }
+        console.log(cart)
 
         res.status(200).json(cart);
     } catch (error) {
@@ -123,6 +140,8 @@ exports.removeFromCart = async (req, res) => {
     try {
         const { productId } = req.params;
         const userId = req.user.id;
+        console.log(userId)
+        console.log("product is"+productId)
 
         // Find the user's cart
         const cart = await Cart.findOne({ userId });
@@ -133,6 +152,7 @@ exports.removeFromCart = async (req, res) => {
 
         // Find the product in the cart
         const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+        console.log("intem is"+itemIndex)
 
         if (itemIndex === -1) {
             return res.status(404).json({ message: 'Product not found in the cart' });
@@ -156,7 +176,9 @@ exports.removeFromCart = async (req, res) => {
 // Clear the user's cart (e.g., after purchase)
 exports.clearCart = async (req, res) => {
     try {
+        console.log("-----------------")
         const userId = req.user.id;
+        console.log(userId)
         console.log("int he cart")
 
         // Find and delete the user's cart

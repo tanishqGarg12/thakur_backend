@@ -14,17 +14,26 @@ const cartSchema = new mongoose.Schema(
           ref: 'Product',
           required: true,
         },
+        name: {
+          type: String,   // Add name field to store product name
+          // required: true,
+        },
+        price: {
+          type: Number,   // Add price field to store product price
+          // required: true,
+        },
         quantity: {
           type: Number,
-          required: true,
+          // required: true,
           min: 1,
         },
+        image: { type: String }, 
       },
     ],
     status: {
       type: String,
       enum: ['active', 'purchased', 'abandoned'],
-      default: 'active', // Active cart, purchased or abandoned
+      default: 'active', // Active cart, purchased, or abandoned
     },
   },
   { timestamps: true }

@@ -9,6 +9,6 @@ router.post('/', authenticate, addToCart);       // Add product to cart
 router.get('/', authenticate, getCart);          // Get user's cart
 router.put('/', authenticate, updateCart);       // Update product quantity in cart
 router.delete('/:productId', authenticate, removeFromCart);  // Remove product from cart
-router.delete('/clear', authenticate, clearCart); // Clear user's cart
-
+router.delete('/', authenticate, clearCart); // Clear user's cart
+// router.delete('/remove/:productId', authenticate, removeFromCart);  // Remove product from cart
 module.exports = router;

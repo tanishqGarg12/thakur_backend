@@ -133,3 +133,41 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.getAllUsers = async (req, res) => {
+  try {
+      // Fetch all users from the database
+      const users = await User.find();
+
+      // Check if no users are found
+      if (!users || users.length === 0) {
+          return res.status(404).json({ message: 'No users found' });
+      }
+
+      // Return the list of users
+      res.status(200).json(users);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteUserById = async (req, res) => {
+  try {
+    // Extract the user ID from the request parameters
+    console.log("in the ws")
+    const { id } = req.params;
+    // Check if the user exists
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete the user from the database
+    // await user.remove();
+
+    // Return success message
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
